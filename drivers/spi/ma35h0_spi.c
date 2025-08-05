@@ -70,6 +70,7 @@
 #define SPI_SS_HIGH     0x00000004
 #define SPI_QUAD_EN     0x400000
 #define SPI_DIR_2QM     0x100000
+#define SPI_REORDER     0x80000
 #define DWIDTH_MASK     0x1F00
 
 #define QSPI_IFR_WIDTH_SINGLE_BIT_SPI   (0 << 0)
@@ -142,7 +143,7 @@ static int ma35h0_qspi_find_mode(const struct spi_mem_op *op)
 }
 
 static bool ma35h0_qspi_supports_op(struct spi_slave *slave,
-                                     const struct spi_mem_op *op)
+                                    const struct spi_mem_op *op)
 {
 	if (ma35h0_qspi_find_mode(op) < 0)
 		return false;
@@ -150,18 +151,11 @@ static bool ma35h0_qspi_supports_op(struct spi_slave *slave,
 	return true;
 }
 
-static __inline u32 EndianSwap(u32 org_val)
-{
-        u32 val;
-        val = ((org_val & 0xFF) << 24) | ((org_val & 0xFF000000) >> 24) | ((org_val & 0xFF00) << 8) | ((org_val & 0xFF0000) >> 8);
-        return val;
-}
-
 static int ma35h0_qspi_exec_op(struct spi_slave *slave,
-                                const struct spi_mem_op *op)
+                               const struct spi_mem_op *op)
 {
 	struct ma35h0_qspi *nq = dev_get_priv(slave->dev->parent);
-	u32 i;
+	u32 i, j = 0;
 	unsigned char *tx = (unsigned char *)op->data.buf.out;
 	unsigned char *rx = op->data.buf.in;
 
@@ -218,14 +212,25 @@ static int ma35h0_qspi_exec_op(struct spi_slave *slave,
 			}
 
 			if ((op->cmd.opcode == QUAD_READ_0x6B) && ((op->data.nbytes % 4) == 0)) {
-				/* Set DWIDTH to 32 bits */
-				ma35h0_qspi_write(ma35h0_qspi_read(nq, CTL) & ~(DWIDTH_MASK), nq, CTL);
-				for (i = 0; i < op->data.nbytes; i += 4) {
-					while ((ma35h0_qspi_read(nq, STATUS) & TXFULL)); //TXFULL
-					ma35h0_qspi_write(0, nq, TX);
-					while ((ma35h0_qspi_read(nq, STATUS) & RXEMPTY)); //RXEMPTY
-					*(unsigned int*)rx = (unsigned int)EndianSwap(ma35h0_qspi_read(nq, RX));
-					rx += 4;
+				/* Set DWIDTH to 32 bits and enable byte reorder*/
+				ma35h0_qspi_write((ma35h0_qspi_read(nq, CTL) & ~(DWIDTH_MASK)) | SPI_REORDER, nq, CTL);
+				for (i = 0; i < op->data.nbytes; ) {
+					if ((ma35h0_qspi_read(nq, STATUS) & TXFULL) == 0) { //TX not FULL
+						ma35h0_qspi_write(0, nq, TX);
+						i += 4;
+					}
+					if ((ma35h0_qspi_read(nq, STATUS) & RXEMPTY) == 0) { //RX not EMPTY
+						*(unsigned int*)rx = ma35h0_qspi_read(nq, RX);
+						rx += 4;
+						j += 4;
+					}
+				}
+				while (j < op->data.nbytes) {
+					if ((ma35h0_qspi_read(nq, STATUS) & RXEMPTY) == 0) { //RX not EMPTY
+						*(unsigned int*)rx = ma35h0_qspi_read(nq, RX);
+						rx += 4;
+						j += 4;
+					}
 				}
 			} else {
 				for (i = 0; i < op->data.nbytes; i++) {
@@ -241,7 +246,7 @@ static int ma35h0_qspi_exec_op(struct spi_slave *slave,
 	while (ma35h0_qspi_read(nq, STATUS) & SPI_BUSY);
 
 	/* Restore to 1-bit mode */
-	ma35h0_qspi_write((ma35h0_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM | DWIDTH_MASK)) | 0x800, nq, CTL);
+	ma35h0_qspi_write((ma35h0_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM | DWIDTH_MASK | SPI_REORDER)) | 0x800, nq, CTL);
 
 	/* Deactiveate SS */
 	ma35h0_qspi_write(ma35h0_qspi_read(nq, SSCTL) & ~SELECTSLAVE0, nq, SSCTL);
@@ -375,3 +380,4 @@ U_BOOT_DRIVER(ma35h0_qspi) = {
 	.priv_auto_alloc_size = sizeof(struct ma35h0_qspi),
 	.probe          = ma35h0_qspi_probe,
 };
+
