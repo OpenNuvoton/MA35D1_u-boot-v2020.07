@@ -169,7 +169,7 @@ static int nvt_set_pwr_src(struct nvt_pinctrl_priv *priv,
         struct nvt_pin_ctrl *ctrl = priv->ctrl;
 	int v=0;
 
-	if(src==1800) v=1;
+	if(src!=1800) v=1;
         nvt_gpio_cla_port(pin_id, &group_num, &port_num);
         base = ctrl->pin_banks[group_num].reg_base;
         value = __raw_readl(base + GPIO_SPW);
