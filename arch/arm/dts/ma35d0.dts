@@ -42,6 +42,10 @@
 	};
 };
 
+&nand {
+	tatus = "okay";
+};
+
 &sdhci1 {
 	status = "okay";
 };

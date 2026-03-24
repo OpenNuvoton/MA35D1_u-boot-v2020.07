@@ -940,6 +940,7 @@ dtb-$(CONFIG_MA35D1) += \
 dtb-$(CONFIG_MA35D0) += \
 	ma35d0.dtb \
 	ma35d0-sdcard0.dtb \
+	ma35d0-sdcard1.dtb \
 	ma35d0-spinor.dtb
 
 dtb-$(CONFIG_MA35H0) += \

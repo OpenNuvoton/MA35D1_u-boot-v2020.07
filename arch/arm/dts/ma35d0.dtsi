@@ -642,7 +642,7 @@
 		interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;	/* 70-32 */
 		nuvoton,sys = <&sys>;
 		clocks = <&clk nand_gate>;
-		status = "okay";
+		status = "disabled";
 		nand-ecc-mode = "hw_oob_first";
 		nand-bus-width = <8>;
 		nand-ecc-strength = <8>;

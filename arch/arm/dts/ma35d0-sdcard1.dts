@@ -26,24 +26,19 @@
 	status = "okay";
 };
 
-&nand {
-        tatus = "okay";
-};
-
 &qspi0 {
         status = "okay";
 
 	#address-cells = <1>;
 	#size-cells = <0>;
-	flash0: mx66l51235l@0 {
-			#address-cells = <1>;
-			#size-cells = <1>;
-			compatible = "jedec,spi-nor";
-			spi-max-frequency = <30000000>;
-			m25p,fast-read;
-			spi-tx-bus-width = <1>;
-			spi-rx-bus-width = <4>;
-			reg = <0>;
+	spi-nand@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "spi-nand";
+		spi-max-frequency = <30000000>;
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <4>;
+		reg = <0>;
 	};
 };
 
