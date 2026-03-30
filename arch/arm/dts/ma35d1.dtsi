@@ -356,6 +356,22 @@
 			drive-strength = <1>; /* 0 ~ 7 */
 		};
 
+		pcfg_qspi_1_8V: pcfg-pcfg_qspi_1_8V {
+			slew-rate = <0>; /* 0:normal, 1:high */
+			input-schmitt-enable;  /* input-schmitt-disable, input-schmitt-enable */
+			bias-disable; /* bias-disable, bias-pull-up, bias-pull-down  */
+			power-source = <1800>; /* 1800:1.8v , 3300:3.3v */
+			drive-strength = <3>; /* 0 ~ 7 */
+		};
+
+		pcfg_qspi_3_3V: pcfg-pcfg_qspi_3_3V {
+			slew-rate = <0>; /* 0:normal, 1:high */
+			input-schmitt-enable;  /* input-schmitt-disable, input-schmitt-enable */
+			bias-disable; /* bias-disable, bias-pull-up, bias-pull-down  */
+			power-source = <3300>; /* 1800:1.8v , 3300:3.3v */
+			drive-strength = <3>; /* 0 ~ 7 */
+		};
+
 		nand {
 			pinctrl_nand: nandgrp{
 				nuvoton,pins =
@@ -494,12 +510,12 @@
 		qspi0 {
 			pinctrl_qspi0: qspi0grp{
 				nuvoton,pins =
-				<SYS_GPD_MFPL_PD0MFP_QSPI0_SS0		&pcfg_default>,
-				<SYS_GPD_MFPL_PD1MFP_QSPI0_CLK		&pcfg_default>,
-				<SYS_GPD_MFPL_PD2MFP_QSPI0_MOSI0	&pcfg_default>,
-				<SYS_GPD_MFPL_PD3MFP_QSPI0_MISO0	&pcfg_default>,
-				<SYS_GPD_MFPL_PD4MFP_QSPI0_MOSI1	&pcfg_default>,
-				<SYS_GPD_MFPL_PD5MFP_QSPI0_MISO1	&pcfg_default>;
+				<SYS_GPD_MFPL_PD0MFP_QSPI0_SS0		&pcfg_qspi_1_8V>,
+				<SYS_GPD_MFPL_PD1MFP_QSPI0_CLK		&pcfg_qspi_1_8V>,
+				<SYS_GPD_MFPL_PD2MFP_QSPI0_MOSI0	&pcfg_qspi_1_8V>,
+				<SYS_GPD_MFPL_PD3MFP_QSPI0_MISO0	&pcfg_qspi_1_8V>,
+				<SYS_GPD_MFPL_PD4MFP_QSPI0_MOSI1	&pcfg_qspi_1_8V>,
+				<SYS_GPD_MFPL_PD5MFP_QSPI0_MISO1	&pcfg_qspi_1_8V>;
 			};
 		};
 
