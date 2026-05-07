@@ -84,6 +84,14 @@ void reset_cpu(ulong addr)
 
 int print_cpuinfo(void)
 {
+#ifdef CONFIG_DEFAULT_DEVICE_TREE
+	const char *dt = CONFIG_DEFAULT_DEVICE_TREE;
+	const char *dash = strchr(dt, '-');
+	int len = dash ? (int)(dash - dt) : (int)strlen(dt);
+
+	printf("CPU:   Nuvoton %.*s\n", len, dt);
+#else
 	printf("CPU:   Nuvoton ma35d0\n");
+#endif
 	return 0;
 }

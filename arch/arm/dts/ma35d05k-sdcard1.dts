@@ -1,0 +1,48 @@
+// SPDX-License-Identifier:
+/*
+ * Copyright 2020 - Nuvoton Technology Corporation
+ *
+ */
+
+/dts-v1/;
+#include "ma35d05k.dtsi"
+
+/ {
+	model = "Nuvoton MA35D05K U-boot";
+	compatible = "nuvoton,ma35d0";
+
+	aliases {
+		spi0 = &qspi0;
+	};
+
+	memory {
+		device_type = "memory";
+		reg = <0x00000000 0x80000000 0 0x07000000>; /* 112M */
+	};
+
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&qspi0 {
+        status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	spi-nand@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "spi-nand";
+		spi-max-frequency = <30000000>;
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <4>;
+		reg = <0>;
+	};
+};
+
+&sdhci1 {
+	status = "okay";
+};
+
