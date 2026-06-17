@@ -23,6 +23,7 @@
 DECLARE_GLOBAL_DATA_PTR;
 
 struct ma35d0_ohci_priv {
+	ohci_t ohci;
 	int	id;
 	struct regmap	*sysreg;
 	void __iomem	*reg;
