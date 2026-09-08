@@ -2211,7 +2211,8 @@ static int mmc_startup_v4(struct mmc *mmc)
 		MMC_VERSION_4_41,
 		MMC_VERSION_4_5,
 		MMC_VERSION_5_0,
-		MMC_VERSION_5_1
+		MMC_VERSION_5_1,
+		MMC_VERSION_5_1B
 	};
 
 #if CONFIG_IS_ENABLED(MMC_TINY)
