@@ -51,7 +51,7 @@
 	"if mmc dev 0; then " \
 		"echo \"Booting form mmc ... ...\"; " \
 		"setenv bootargs root=/dev/${mmc_block} rootfstype=ext4 rw rootwait console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
-		"mmc read ${kernel_addr_r} 0x1800 0x8000; " \
+		"mmc read ${kernel_addr_r} 0x1800 0xf000; " \
 		"mmc read ${fdt_addr_r} 0x1600 0x80; " \
 		"booti ${kernel_addr_r} - ${fdt_addr_r}; " \
 	"fi;\0"
