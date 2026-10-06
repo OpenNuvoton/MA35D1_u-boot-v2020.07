@@ -429,23 +429,45 @@
 			};
 		};
 
-		emac0 {
-			pinctrl_emac0: emac0grp{
+		gmac0 {
+			pinctrl_gmac0: gmac0grp{
 				nuvoton,pins =
-				<SYS_GPE_MFPL_PE0MFP_RMII0_MDC		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE1MFP_RMII0_MDIO		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE2MFP_RMII0_TXEN		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE3MFP_RMII0_TXD0		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE4MFP_RMII0_TXD1		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE5MFP_RMII0_REFCLK	&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE6MFP_RMII0_CRSDV	&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPL_PE7MFP_RMII0_RXD0		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPH_PE8MFP_RMII0_RXD1		&pcfg_emac_3_3V>,
-				<SYS_GPE_MFPH_PE9MFP_RMII0_RXERR	&pcfg_emac_3_3V>;
+				<SYS_GPE_MFPL_PE0MFP_RGMII0_MDC    &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE1MFP_RGMII0_MDIO   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE2MFP_RGMII0_TXCTL  &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE3MFP_RGMII0_TXD0   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE4MFP_RGMII0_TXD1   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE5MFP_RGMII0_RXCLK  &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE6MFP_RGMII0_RXCTL  &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPL_PE7MFP_RGMII0_RXD0   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE8MFP_RGMII0_RXD1   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE9MFP_RGMII0_RXD2   &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE10MFP_RGMII0_RXD3  &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE11MFP_RGMII0_TXCLK &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE12MFP_RGMII0_TXD2  &pcfg_emac_1_8V>,
+				<SYS_GPE_MFPH_PE13MFP_RGMII0_TXD3  &pcfg_emac_1_8V>;
 			};
 		};
 
-		emac1 {
+		gmac1 {
+			pinctrl_gmac1: gmac1grp{
+				nuvoton,pins =
+				<SYS_GPF_MFPL_PF0MFP_RGMII1_MDC    &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF1MFP_RGMII1_MDIO   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF2MFP_RGMII1_TXCTL  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF3MFP_RGMII1_TXD0   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF4MFP_RGMII1_TXD1   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF5MFP_RGMII1_RXCLK  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF6MFP_RGMII1_RXCTL  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF7MFP_RGMII1_RXD0   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF8MFP_RGMII1_RXD1   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF9MFP_RGMII1_RXD2   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF10MFP_RGMII1_RXD3  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF11MFP_RGMII1_TXCLK &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF12MFP_RGMII1_TXD2  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPH_PF13MFP_RGMII1_TXD3  &pcfg_emac_1_8V>;
+			};
+
 			pinctrl_emac1: emac1grp{
 				nuvoton,pins =
 				<SYS_GPF_MFPL_PF0MFP_RMII1_MDC		&pcfg_emac_3_3V>,
@@ -696,15 +718,15 @@
 		status = "okay";
 	};
 
-	emac0: ethernet@40120000 {
-		compatible = "nuvoton,ma35d0-emac";
+	gmac0: ethernet@40120000 {
+		compatible = "nuvoton,ma35d1-gmac";
 		reg = <0x0 0x40120000 0x0 0x10000>;
 		mac-address = [ 00 11 22 33 44 55 ];
-		phy-mode = "rmii";
+		phy-mode = "rgmii-id";
 		phy-handle = <&eth_phy0>;
-		nuvoton,ma35d0-sys = <&sys>;
+		nuvoton,ma35d1-sys = <&sys>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_emac0>;
+		pinctrl-0 = <&pinctrl_gmac0>;
 		clocks = <&clk emac0_gate>;
 		clock-names = "stmmaceth";
 		mac-id = <0>;
@@ -720,15 +742,15 @@
 		};
 	};
 
-	emac1: ethernet@40130000 {
-		compatible = "nuvoton,ma35d0-emac";
+	gmac1: ethernet@40130000 {
+		compatible = "nuvoton,ma35d1-gmac";
 		reg = <0x0 0x40130000 0x0 0x10000>;
 		mac-address = [ 00 11 22 33 44 66 ];
-		phy-mode = "rmii";
+		phy-mode = "rgmii-id";
 		phy-handle = <&eth_phy1>;
-		nuvoton,ma35d0-sys = <&sys>;
+		nuvoton,ma35d1-sys = <&sys>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_emac1>;
+		pinctrl-0 = <&pinctrl_gmac1>;
 		clocks = <&clk emac1_gate>;
 		clock-names = "stmmaceth";
 		mac-id = <1>;
