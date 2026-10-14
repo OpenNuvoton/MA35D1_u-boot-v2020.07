@@ -10,6 +10,8 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+unsigned long tfa_arg1 __attribute__((section(".data"))) = 0;
+
 int board_late_init(void)
 {
 	return 0;

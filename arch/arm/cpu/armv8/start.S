@@ -370,5 +370,7 @@ ENTRY(c_runtime_cpu_setup)
 ENDPROC(c_runtime_cpu_setup)
 
 WEAK(save_boot_params)
+	ldr	x4, =tfa_arg1
+	str	x1, [x4]
 	b	save_boot_params_ret	/* back to my caller */
 ENDPROC(save_boot_params)
