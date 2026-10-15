@@ -7,6 +7,7 @@
 #include <dm.h>
 #include <log.h>
 #include <wdt.h>
+#include <env.h>
 #include <asm/io.h>
 #include <pwm.h>
 
@@ -21,7 +22,7 @@ static void setup_linux_mtdparts(void)
 	const char *mtdparts = CONFIG_MTDPARTS_DEFAULT;
 	char buf[512];
 
-	if (!mtdparts)
+	if (!*mtdparts)
 		return;
 
 	if (!strncmp(mtdparts, "mtdparts=", 9))
@@ -40,7 +41,7 @@ int board_late_init(void)
 {
 	char buf[32];
 
-	snprintf(buf, sizeof(buf), "%d", tfa_arg1);
+	snprintf(buf, sizeof(buf), "%ld", tfa_arg1);
 	env_set("kernel_ver", buf);
 
 	setup_linux_mtdparts();
