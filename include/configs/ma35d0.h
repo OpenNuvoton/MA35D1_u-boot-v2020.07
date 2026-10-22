@@ -55,7 +55,7 @@
 	"mmcboot=" \
 	"if mmc dev 0; then " \
 		"echo \"Booting from mmc ... ...\"; " \
-		"setenv bootargs root=/dev/${mmc_block} rootfstype=ext4 rw rootwait console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+		"setenv bootargs root=/dev/${mmc_block} rootfstype=ext4 rw rootwait console=ttyS0,115200n8 rdinit=/sbin/init ${memargs}; " \
 		"if test \"${fitboot}\" = \"1\"; then " \
 			"echo \"Boot FIT image from mmc slot A\"; " \
 			"run mmc_read_fit_a; " \
@@ -110,7 +110,7 @@
 		"nandboot=" \
 	"if test ${mtdids} = 'nand0=nand0' ; then " \
 		"echo \"Booting from nand ... ...\"; " \
-		"setenv bootargs noinitrd root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+		"setenv bootargs noinitrd root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init ${memargs}; " \
 		"if test \"${fitboot}\" = \"1\"; then " \
 			"setenv bootargs ${bootargs} ${linux_mtdparts} ubi.mtd=rootfs; " \
 			"echo \"Boot FIT image from nand slot A\"; " \
@@ -167,7 +167,7 @@
 	"spinandboot=" \
 	"if test ${mtdids} = 'spi-nand0=spi-nand0' ; then " \
 		"echo \"Booting from spinand ... ...\"; " \
-		"setenv bootargs noinitrd root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+		"setenv bootargs noinitrd root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init ${memargs}; " \
 		"if test \"${fitboot}\" = \"1\"; then " \
 			"setenv bootargs ${bootargs} ${linux_mtdparts} ubi.mtd=rootfs; " \
 			"echo \"Boot FIT image from spinand slot A\"; " \
@@ -222,7 +222,7 @@
 #define SPINORARGS \
         "spinorboot=" \
                 "echo \"Booting from spinor ... ...\"; " \
-                "setenv bootargs noinitrd ${spinor_bootargs} rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+                "setenv bootargs noinitrd ${spinor_bootargs} rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init ${memargs}; " \
                 "run spinor_boot; " \
                 "booti ${kernel_addr_r} - ${fdt_addr_r};\0"
 
@@ -285,6 +285,7 @@
 	"bootfile=Image\0" \
 	"kernel_addr_r=0x80080000\0" \
 	"fitboot=0\0" \
+	"optee_rmem=0\0" \
 	"fit_addr_r=0x82000000\0" \
 	"fdt_addr_r=0x85000000\0" \
 	"bmp_addr_r=0x8D200000\0" \
@@ -295,6 +296,7 @@
 	"bootubipart=rootfs\0" \
 	"bootubivol=rootfs\0" \
 	"kernelmem=256M\0" \
+	"memargs=mem=${kernelmem}\0" \
 	"mmc_block=mmcblk1p1\0" \
 	"spinand_ubiblock=9\0" \
 	"nand_ubiblock=4\0" \

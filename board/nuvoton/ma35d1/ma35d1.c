@@ -5,15 +5,33 @@
 
 #include <common.h>
 #include <dm.h>
-#include <log.h>
-#include <wdt.h>
 #include <env.h>
-#include <asm/io.h>
+#include <fdtdec.h>
+#include <fdt_support.h>
+#include <log.h>
 #include <pwm.h>
+#include <wdt.h>
+#include <asm/io.h>
+
+#define MA35_PID_REG		0x40460000
+#define MA35_PID_MASK		0x00FF0000U
+#define MA35_PID_SHIFT		16U
+
+#define PID_MA35D16AJ87C	0x00160000
+#define PID_MA35D16F987C	0x00240000
+#define PID_MA35D16FJ87C	0x002C0000
+#define PID_MA35D14F984		0x00310000
+
+#define REG_SYS_GPG_MFPL	0x404600B0
+
+#define DRAM_BASE		0x80000000ULL
+#define DRAM_SIZE_256M		0x10000000ULL
+#define DRAM_SIZE_512M		0x20000000ULL
+
+#define OPTEE_CORE_BASE		0x8F800000ULL
+#define OPTEE_CORE_SIZE		0x00800000ULL
 
 DECLARE_GLOBAL_DATA_PTR;
-
-#define REG_SYS_GPG_MFPL         (0x404600B0)
 
 unsigned long tfa_arg1 __attribute__((section(".data"))) = 0;
 
@@ -35,6 +53,67 @@ static void setup_linux_mtdparts(void)
 		snprintf(buf, sizeof(buf), "mtdparts=%s", mtdparts);
 		env_set("linux_mtdparts", buf);
 	}
+}
+
+static int ma35_add_optee_core_node(void *fdt)
+{
+	struct fdt_memory core = {
+		.start = OPTEE_CORE_BASE,
+		.end = OPTEE_CORE_BASE + OPTEE_CORE_SIZE - 1,
+	};
+	char path[64];
+	int node, ret;
+
+	ret = fdt_increase_size(fdt, 768);
+	if (ret < 0)
+		return ret;
+
+	ret = fdtdec_add_reserved_memory(fdt, "optee_core", &core, NULL);
+	if (ret < 0)
+		return ret;
+
+	snprintf(path, sizeof(path), "/reserved-memory/optee_core@%llx", OPTEE_CORE_BASE);
+	node = fdt_path_offset(fdt, path);
+	if (node < 0)
+		return node;
+
+	return fdt_setprop(fdt, node, "no-map", NULL, 0);
+}
+
+static u64 ma35_dram_size(void)
+{
+	u32 pid = (readl((void *)MA35_PID_REG) & MA35_PID_MASK) >> MA35_PID_SHIFT;
+
+	switch (pid) {
+	case PID_MA35D16AJ87C:
+	case PID_MA35D16F987C:
+	case PID_MA35D16FJ87C:
+	case PID_MA35D14F984:
+		return DRAM_SIZE_512M;
+	default:
+		return DRAM_SIZE_256M;
+	}
+}
+
+int ft_board_setup(void *blob, struct bd_info *bd)
+{
+	const char *sw = env_get("optee_rmem");
+	u64 mem_start = DRAM_BASE;
+	u64 mem_size = ma35_dram_size();
+	int ret;
+
+	if (!sw || strcmp(sw, "1"))
+		return 0;
+
+	ret = ma35_add_optee_core_node(blob);
+	if (ret)
+		printf("Failed to add optee_core: %s\n", fdt_strerror(ret));
+
+	ret = fdt_fixup_memory_banks(blob, &mem_start, &mem_size, 1);
+	if (ret)
+		printf("Failed to fixup memory: %s\n", fdt_strerror(ret));
+
+	return 0;
 }
 
 int board_late_init(void)
