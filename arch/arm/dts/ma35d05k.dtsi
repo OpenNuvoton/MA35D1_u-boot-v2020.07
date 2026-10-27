@@ -442,10 +442,10 @@
 				<SYS_GPE_MFPL_PE7MFP_RGMII0_RXD0   &pcfg_emac_1_8V>,
 				<SYS_GPE_MFPH_PE8MFP_RGMII0_RXD1   &pcfg_emac_1_8V>,
 				<SYS_GPE_MFPH_PE9MFP_RGMII0_RXD2   &pcfg_emac_1_8V>,
-				<SYS_GPE_MFPH_PE10MFP_RGMII0_RXD3  &pcfg_emac_1_8V>,
-				<SYS_GPE_MFPH_PE11MFP_RGMII0_TXCLK &pcfg_emac_1_8V>,
-				<SYS_GPE_MFPH_PE12MFP_RGMII0_TXD2  &pcfg_emac_1_8V>,
-				<SYS_GPE_MFPH_PE13MFP_RGMII0_TXD3  &pcfg_emac_1_8V>;
+				<SYS_GPF_MFPL_PF0MFP_RGMII0_RXD3   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF1MFP_RGMII0_TXCLK  &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF2MFP_RGMII0_TXD2   &pcfg_emac_1_8V>,
+				<SYS_GPF_MFPL_PF3MFP_RGMII0_TXD3   &pcfg_emac_1_8V>;
 			};
 		};
 
@@ -754,7 +754,7 @@
 		clocks = <&clk emac1_gate>;
 		clock-names = "stmmaceth";
 		mac-id = <1>;
-		status = "okay";
+		status = "disabled";
 		mdio {
 			compatible = "snps,dwmac-mdio";
 			#address-cells = <1>;
