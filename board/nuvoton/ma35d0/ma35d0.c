@@ -109,6 +109,18 @@ int ft_board_setup(void *blob, struct bd_info *bd)
 int board_late_init(void)
 {
 	char buf[32];
+	const char *kmem = env_get("kernelmem");
+	const char *optee = env_get("optee_rmem");
+
+	if (optee && !strcmp(optee, "1")) {
+		snprintf(buf, sizeof(buf), "mem=%lluM", ma35_dram_size() >> 20);
+		env_set("memargs", buf);
+	} else if (kmem) {
+		snprintf(buf, sizeof(buf), "mem=%s", kmem);
+		env_set("memargs", buf);
+	} else {
+		env_set("memargs", NULL);
+	}
 
 	snprintf(buf, sizeof(buf), "%ld", tfa_arg1);
 	env_set("kernel_ver", buf);

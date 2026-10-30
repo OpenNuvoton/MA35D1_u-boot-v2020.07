@@ -296,7 +296,6 @@
 	"bootubipart=rootfs\0" \
 	"bootubivol=rootfs\0" \
 	"kernelmem=256M\0" \
-	"memargs=mem=${kernelmem}\0" \
 	"mmc_block=mmcblk1p1\0" \
 	"spinand_ubiblock=9\0" \
 	"nand_ubiblock=4\0" \
