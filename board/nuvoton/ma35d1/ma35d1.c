@@ -17,10 +17,10 @@
 #define MA35_PID_MASK		0x00FF0000U
 #define MA35_PID_SHIFT		16U
 
-#define PID_MA35D16AJ87C	0x00160000
-#define PID_MA35D16F987C	0x00240000
-#define PID_MA35D16FJ87C	0x002C0000
-#define PID_MA35D14F984		0x00310000
+#define PID_MA35D16AJ87C	0x16U
+#define PID_MA35D16F987C	0x24U
+#define PID_MA35D16FJ87C	0x2CU
+#define PID_MA35D14F984		0x31U
 
 #define REG_SYS_GPG_MFPL	0x404600B0
 
@@ -108,11 +108,10 @@ int ft_board_setup(void *blob, struct bd_info *bd)
 	ret = ma35_add_optee_core_node(blob);
 	if (ret)
 		printf("Failed to add optee_core: %s\n", fdt_strerror(ret));
-
 	ret = fdt_fixup_memory_banks(blob, &mem_start, &mem_size, 1);
 	if (ret)
 		printf("Failed to fixup memory: %s\n", fdt_strerror(ret));
-
+		
 	return 0;
 }
 
